@@ -5,11 +5,18 @@ public class Main {
         boolean stopBoolean = false;
         Scanner input = new Scanner(System.in);
         String line = "";
-        ShellCommands shellCommands = new ShellCommands(); // Is this necessary?
+        {
+            ShellCommands.clearScreen();
+            ShellCommands.clearScreen();
+            String welcome = "\nWelcome to Night Jackal's Intranet!\nHere you can use this CLI built search engine to browse the intranet.\nYou can find all sorts of information here, and even add your own files and articles!\n\tType \033[1;32m@commands\033[0m\033[1m to see all of the commands available ";
+            ShellCommands.outPrinter(welcome, 5);
+        }
         while (!stopBoolean) {
             line = input.nextLine();
-            for (int i = 0; i < commands.length; i++) {
-                executeCommand(line);
+            ShellCommands.clearScreen();
+            int result = executeCommand(line);
+            if (result != 0) {
+                break;
             }
         }
         input.close();
@@ -19,19 +26,18 @@ public class Main {
             "@stop", "@commands", "@search"
     };
 
-    private static int executeCommand(String command) { // There is a bug here that I need to fix, 
-                                                        // it has to do with the comparison of strings to my string array and also the for loop I used.
-        boolean commandExist = false;
-        if (command == commands[0].toString()) {
+    private static int executeCommand(String command) {
+        if (command.equals(commands[0].toString())) {
             ShellCommands.stop();
-            commandExist = true;
             return 1;
         }
-        else if (command == commands[1].toString()) {
+        else if (command.equals(commands[1].toString())) {
             ShellCommands.showCommands();
-            commandExist = true;
         }
-        else if (!commandExist) {
+        else if (command.equals(commands[2].toString())) {
+            ShellCommands.showCommands();
+        }
+        else  {
             ShellCommands.outPrinter("That is an invalid comamnd.\n\tPlease type: @commands\tto show commands", 1);
         }
         return 0;
